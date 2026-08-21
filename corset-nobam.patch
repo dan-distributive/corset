@@ -1,0 +1,46 @@
+--- corset.cc	2026-08-21 03:56:20.636062860 +0000
++++ corset-nobam.cc	2026-08-21 03:57:00.957374986 +0000
+@@ -47,8 +47,10 @@
+ #include <unistd.h>
+ #include <signal.h>
+ 
++#ifdef HAVE_BAM
+ #include <sam.h>
+ #include <bam.h>
++#endif
+ 
+ //#include <gperftools/profiler.h>
+ 
+@@ -59,6 +61,7 @@
+ const string corset_extension=".corset-reads";
+ 
+ 
++#ifdef HAVE_BAM
+ // a function to parse a bam file. It required samtools
+ // to read it. The alignments are stored in a ReadList object.
+ ReadList * read_bam_file(string all_file_names, TranscriptList * trans, int sample){
+@@ -108,6 +111,14 @@
+    return rList; //return the alignment list
+ }
+ 
++#endif
++ReadList * read_bam_file(string a, TranscriptList * t, int s){
++#ifndef HAVE_BAM
++  cerr << "BAM support not compiled in; use -i corset or -i salmon_eq_classes" << endl; exit(1);
++#endif
++  return NULL;
++}
++
+ // a function to parse a fasta file and k-mers to cluster
+ ReadList * read_fasta_file(string all_file_names, TranscriptList * trans, int sample){
+ 
+--- /tmp/Read.h.orig	2026-08-21 03:58:14.427553777 +0000
++++ Read.h	2026-08-21 03:58:14.431223599 +0000
+@@ -23,6 +23,7 @@
+ #include <fstream>
+ #include <iostream>
+ #include <Transcript.h>
++#include <cstdint>
+ 
+ using namespace std;
+ 

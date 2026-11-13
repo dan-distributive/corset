@@ -310,8 +310,8 @@ async function main() {
 
   /* COMPUTE GROUPS */
   job.computeGroups = (computeGroupFlag || 'public').split(':').map((g) => g.trim()).filter(Boolean).map((group) => {
-    const [joinKey, joinSecret] = group.split(',').map((s) => s.trim());
-    return joinSecret ? { joinKey, joinSecret } : { joinKey };
+    const [attachKey, attachSecret] = group.split(',').map((s) => s.trim());
+    return attachSecret ? { attachKey, attachSecret } : { attachKey };
   });
 
   /* PUBLIC INFO */
